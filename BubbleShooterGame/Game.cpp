@@ -1,5 +1,9 @@
 #include "Game.h"
 #include <cmath>
+#include <SFML/Graphics.hpp>
+#include <iostream>
+
+using namespace std;
 
 Game::Game()
     : window(sf::VideoMode(800, 600), "Bubble Shooter"), shooterPos(400, 550)
@@ -9,7 +13,20 @@ Game::Game()
     shooter.setPosition(shooterPos);
     setUpLevel();
     shooter.setFillColor(randomColor());
-    setUpBubble(); 
+    setUpBubble();
+
+    if (!backgroundTexture.loadFromFile("assets/BBGame.jpg")) {
+        cout << "Failed to load background image!" << std::endl;
+    }
+    backgroundSprite.setTexture(backgroundTexture);
+
+    // Scale to window size if needed
+    sf::Vector2u windowSize = window.getSize();
+    sf::Vector2u textureSize = backgroundTexture.getSize();
+    backgroundSprite.setScale(
+        static_cast<float>(windowSize.x) / textureSize.x,
+        static_cast<float>(windowSize.y) / textureSize.y
+    );
 }
 
 void Game::spawnBubble(float x, float y, sf::Color color)
@@ -19,6 +36,8 @@ void Game::spawnBubble(float x, float y, sf::Color color)
 
 void Game::shootBubble()
 {
+    if (gameWon) return;  // Don't allow shooting if game is won
+
     if (currentShot != nullptr) return; // Only one bubble can be in the air
 
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
@@ -99,6 +118,9 @@ void Game::update()
             }
         }
     }
+    if (!gameWon && bubbles.empty()) {
+        gameWon = true;
+    }
 }
 void Game::setUpLevel()
 {
@@ -138,15 +160,19 @@ void Game::render()
 {
     window.clear();
 
+    window.draw(backgroundSprite); // Draw the background first
+
     window.draw(shooter);  // Draw the shooter
 
     for (auto& bubble : bubbles) {
-        bubble.render(window);  // Draw bubbles stuck in grid
+        bubble.render(window);  // Draw bubbles
     }
 
     if (currentShot) {
-        currentShot->render(window);  // Draw flying bubble
+        currentShot->render(window);  // Draw the flying bubble
     }
+
+    // Aiming line
     sf::Vertex line[] =
     {
         sf::Vertex(shooterPos + sf::Vector2f(15, 15), sf::Color::White),
@@ -154,9 +180,21 @@ void Game::render()
     };
     window.draw(line, 2, sf::Lines);
 
+    // Draw win message
+    if (gameWon) {
+        sf::Font font;
+        if (font.loadFromFile("assets/arial.ttf")) { // You can use any font you have
+            sf::Text winText("You Win!", font, 50);
+            winText.setFillColor(sf::Color::Green);
+            winText.setStyle(sf::Text::Bold);
+            winText.setPosition(800 / 2 - 100, 600 / 2 - 50);
+            window.draw(winText);
+        }
+    }
 
     window.display();
 }
+
 
 void Game::handling()
 {
