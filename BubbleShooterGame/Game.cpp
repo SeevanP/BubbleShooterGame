@@ -262,7 +262,7 @@ sf::Color Game::randomColor()
 {
     int r = rand() % 3;
     switch (r) {
-    case 0: return sf::Color::Blue;
+    case 0: return sf::Color::White;
     case 1: return sf::Color::Magenta;
     case 2: return sf::Color::Yellow;
     }
