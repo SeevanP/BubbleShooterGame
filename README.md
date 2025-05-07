@@ -1,8 +1,11 @@
 Part of my university project. This a bubble shooter mini game made in SFML-2.6.2
-![image](https://github.com/user-attachments/assets/41f951ca-9a50-484f-8d68-bdaba1e9846f)
+![Screenshot (97)](https://github.com/user-attachments/assets/fab09a32-8849-4a5c-a9bf-7673104eac76)
+
 As you can see it has a 120 second timer and you need to beat it within that time 
+![Screenshot (98)](https://github.com/user-attachments/assets/b90af196-ee63-4a8c-921d-1b5c1ae1d6b1)
 
 Has a soothing whale sound in the background for added immersion
 
 Has lose conditions like when all your bubbles reach back to the shooter you automatically lose and the window closes after 5 seconds 
-![image](https://github.com/user-attachments/assets/54578aed-6460-4811-af23-2de6e25e7498)
+![Screenshot (99)](https://github.com/user-attachments/assets/01aba250-141c-4080-a1dd-c872ff1e33c1)
+
